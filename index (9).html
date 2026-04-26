@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$DRILLY — The Legend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #f5c842;
+      --orange: #ff6a00;
+      --red: #c0392b;
+      --dark: #080808;
+      --mid: #111111;
+      --text: #e8e8e8;
+      --muted: #888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ─── MUTE BUTTON ─── */
+    #mute-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: rgba(245, 200, 66, 0.15);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      padding: 10px 22px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      border-radius: 2px;
+    }
+    #mute-btn:hover {
+      background: var(--gold);
+      color: var(--dark);
+      box-shadow: 0 0 20px var(--gold);
+    }
+    #mute-btn .icon { font-size: 1.2rem; margin-right: 6px; }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      filter: brightness(0.45) saturate(1.2);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.0) 40%,
+        rgba(8,8,8,1) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 6px;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(7rem, 18vw, 16rem);
+      line-height: 0.9;
+      color: #fff;
+      text-shadow:
+        0 0 80px rgba(245, 200, 66, 0.4),
+        0 0 160px rgba(245, 200, 66, 0.15);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero-subtitle {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      letter-spacing: 4px;
+      color: var(--text);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.5s forwards;
+    }
+    .scroll-indicator span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      color: var(--muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: pulse-line 2s ease infinite;
+    }
+
+    /* ─── ABOUT / LORE ─── */
+    #about {
+      padding: 120px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 6px;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .section-body {
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.8;
+      color: #bbb;
+      font-weight: 300;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .highlight {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 28px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      background: rgba(245,200,66,0.06);
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 60px;
+      opacity: 0.5;
+    }
+
+    /* ─── MOSAIC GRID ─── */
+    #gallery {
+      padding: 80px 20px;
+      background: #0a0a0a;
+    }
+
+    .gallery-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .mosaic {
+      columns: 5;
+      column-gap: 4px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1200px) { .mosaic { columns: 4; } }
+    @media (max-width: 900px)  { .mosaic { columns: 3; } }
+    @media (max-width: 600px)  { .mosaic { columns: 2; } }
+
+    .mosaic-item {
+      break-inside: avoid;
+      margin-bottom: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: #1a1a1a;
+    }
+
+    .mosaic-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease, filter 0.4s ease;
+      filter: brightness(0.8) saturate(0.9);
+    }
+
+    .mosaic-item:hover img {
+      transform: scale(1.06);
+      filter: brightness(1) saturate(1.2);
+    }
+
+    .mosaic-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 10px 10px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .mosaic-item:hover .mosaic-caption { opacity: 1; }
+
+    /* placeholder tiles */
+    .tile-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      color: #333;
+      text-align: center;
+      padding: 10px;
+    }
+    .tile-placeholder.tall { aspect-ratio: 2/3; }
+    .tile-placeholder.wide { aspect-ratio: 3/2; }
+
+    /* ─── CONTRACT ─── */
+    #contract {
+      padding: 120px 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    #contract::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(245,200,66,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .coming-soon-badge {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: 8px;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      padding: 20px 60px;
+      margin-top: 30px;
+      opacity: 0.8;
+      animation: pulse-glow 3s ease infinite;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 60px 40px 40px;
+      border-top: 1px solid #1a1a1a;
+      text-align: center;
+    }
+
+    .socials {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .social-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      padding: 10px 20px;
+      border: 1px solid #222;
+    }
+    .social-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    .footer-tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: #333;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse-line {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(245,200,66,0.2); }
+      50%       { box-shadow: 0 0 50px rgba(245,200,66,0.5); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="bg-audio" loop preload="auto">
+  <source src="drill.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MUTE BUTTON -->
+<button id="mute-btn" onclick="toggleMute()">
+  <span class="icon" id="mute-icon">🔊</span>
+  <span id="mute-label">MUTE</span>
+</button>
+
+<!-- HERO -->
+<section id="hero">
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">The Official Memecoin</p>
+    <h1 class="hero-title">$DRILLY</h1>
+    <p class="hero-subtitle">Born in the trenches. Endorsed by the culture.</p>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <span class="section-label">// The Legend</span>
+  <h2 class="section-title">The Drill Goes Deeper</h2>
+  <div class="divider"></div>
+  <p class="section-body">
+    <span class="highlight">$DRILLY</span> isn't just a coin — it's a movement. One of the biggest memes born deep in the trenches, forged by the community and recognized at every level.
+    Officially <span class="highlight">endorsed by PumpFun</span>, $DRILLY is the authentic embodiment of the meme — the official stamp on what the culture already knew.
+    <br><br>
+    While others fake it, $DRILLY drills through. No cap. No games. Just raw, undeniable energy from the streets of crypto straight to the top.
+  </p>
+  <div class="badge">🔩 ENDORSED BY PUMPFUN 🔩</div>
+</section>
+
+<!-- GALLERY / MOSAIC -->
+<section id="gallery">
+  <div class="gallery-header">
+    <span class="section-label">// The Culture</span>
+    <h2 class="section-title" style="color:#fff;">The Drilly Universe</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="mosaic" id="mosaic-grid">
+
+    <!-- Row of placeholder tiles — replace src with your images when ready -->
+    <!-- To add your images: replace the class="tile-placeholder" divs below with <img src="yourimage.jpg"> -->
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILLY LORE</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">IN THE TRENCHES</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILL GANG</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">ENDORSED</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">PUMPFUN APPROVED</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILLY VIBES</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">NO LIMITS</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">THE LEGEND</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILLY CULTURE</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILL OR DIE</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILLY WORLD</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">ON TOP</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">CERTIFIED TRENCHES</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">THE MOVEMENT</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">DRILLY ERA</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">BORN HERE</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">$DRILLY</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">REAL ONES</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">WE DRILL</div>
+    </div>
+
+    <div class="mosaic-item">
+      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
+      <div class="mosaic-caption">LEGENDARY</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTRACT -->
+<section id="contract">
+  <span class="section-label">// Contract Address</span>
+  <h2 class="section-title">Get In Early</h2>
+  <div class="divider"></div>
+  <p class="section-body" style="margin-bottom:10px;">
+    The contract drops when the drill hits. Stay locked in.
+  </p>
+  <div class="coming-soon-badge">COMING SOON</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="socials">
+    <a href="#" class="social-link">TWITTER</a>
+    <a href="#" class="social-link">TELEGRAM</a>
+    <a href="#" class="social-link">DEXSCREENER</a>
+    <a href="#" class="social-link">PUMPFUN</a>
+  </div>
+  <p class="footer-tagline">$DRILLY — BORN IN THE TRENCHES. ENDORSED BY THE CULTURE.</p>
+</footer>
+
+<script>
+  // ─── AUDIO AUTOPLAY ───
+  const audio = document.getElementById('bg-audio');
+  const muteBtn = document.getElementById('mute-btn');
+  const muteIcon = document.getElementById('mute-icon');
+  const muteLabel = document.getElementById('mute-label');
+
+  let muted = false;
+
+  function startAudio() {
+    audio.volume = 0.6;
+    audio.play().catch(() => {
+      // Autoplay blocked — play on first interaction
+      document.addEventListener('click', () => audio.play(), { once: true });
+      document.addEventListener('keydown', () => audio.play(), { once: true });
+    });
+    document.removeEventListener('click', startAudio);
+    document.removeEventListener('visibilitychange', handleVisibility);
+  }
+
+  function handleVisibility() {
+    if (document.visibilityState === 'visible') startAudio();
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    audio.muted = muted;
+    muteIcon.textContent = muted ? '🔇' : '🔊';
+    muteLabel.textContent = muted ? 'UNMUTE' : 'MUTE';
+  }
+
+  // Try immediately, fallback to interaction
+  window.addEventListener('load', () => {
+    audio.play().catch(() => {
+      document.addEventListener('click', startAudio, { once: true });
+      document.addEventListener('keydown', startAudio, { once: true });
+    });
+  });
+
+  // Resume if tab was in background
+  document.addEventListener('visibilitychange', handleVisibility);
+
+  // ─── SCROLL REVEAL ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('#about .section-label, #about .section-title, #about .section-body, #about .badge, #contract .section-title, #contract .section-body, #contract .coming-soon-badge').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
