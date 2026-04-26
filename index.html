@@ -210,6 +210,131 @@
       background: rgba(245,200,66,0.06);
     }
 
+    /* ─── DRILL LAB ─── */
+    #meme-lab {
+      padding: 100px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .lab-canvas {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      max-height: 75vh;
+      aspect-ratio: 1;
+      margin: 40px auto 0;
+      background: #0d0d0d;
+      border: 2px dashed #333;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s;
+    }
+
+    .lab-canvas.has-image {
+      border-style: solid;
+      border-color: var(--gold);
+      cursor: default;
+    }
+
+    .lab-canvas.dragover {
+      background: rgba(245,200,66,0.05);
+      border-color: var(--gold);
+    }
+
+    .lab-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .lab-empty .lab-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      color: var(--gold);
+    }
+
+    .lab-empty .lab-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+    }
+
+    #userImage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .drill-overlay {
+      position: absolute;
+      width: 30%;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .drill-overlay:active { cursor: grabbing; }
+    .drill-overlay svg {
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+    }
+
+    .lab-controls {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lab-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .lab-controls input[type=range] {
+      width: 160px;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    .lab-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      padding: 12px 22px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lab-btn:hover { background: var(--gold); color: #000; }
+    .lab-btn.primary { background: var(--gold); color: #000; }
+    .lab-btn.primary:hover { background: #fff; border-color: #fff; }
+
     /* ─── DIVIDER ─── */
     .divider {
       width: 80px;
@@ -419,6 +544,71 @@
   <div class="badge">🔩 ENDORSED BY PUMPFUN 🔩</div>
 </section>
 
+<!-- DRILL LAB / MEME GENERATOR -->
+<section id="meme-lab">
+  <span class="section-label">// Drill Lab</span>
+  <h2 class="section-title">Make Your Own</h2>
+  <div class="divider"></div>
+  <p class="section-body">Drop in any image. Drag the drill where it belongs. Resize. Download. Post.</p>
+
+  <div class="lab-canvas" id="labCanvas">
+    <div class="lab-empty" id="labEmpty">
+      <div class="lab-big">DROP IMAGE HERE</div>
+      <div class="lab-sub">or click to upload</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <img id="userImage" alt="" hidden>
+    <div id="drillOverlay" class="drill-overlay" hidden>
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="drillBody" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#ffd84a"/>
+            <stop offset="0.5" stop-color="#f5c842"/>
+            <stop offset="1" stop-color="#b8901a"/>
+          </linearGradient>
+          <linearGradient id="metalChuck" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#e0e0e0"/>
+            <stop offset="1" stop-color="#555"/>
+          </linearGradient>
+        </defs>
+        <!-- Body -->
+        <path d="M40 30 L120 30 Q132 30 132 42 L132 62 Q132 72 120 72 L40 72 Q28 72 28 60 L28 42 Q28 30 40 30 Z" fill="url(#drillBody)" stroke="#000" stroke-width="2.5"/>
+        <!-- Body highlight -->
+        <ellipse cx="78" cy="40" rx="38" ry="4" fill="rgba(255,255,255,0.35)"/>
+        <!-- Handle -->
+        <path d="M55 70 L52 118 Q52 124 58 124 L82 124 Q88 124 88 118 L85 70 Z" fill="#1a1a1a" stroke="#000" stroke-width="2.5"/>
+        <!-- Handle grip lines -->
+        <path d="M56 85 L84 85 M55 95 L85 95 M54 105 L86 105" stroke="#333" stroke-width="1.5"/>
+        <!-- Trigger -->
+        <rect x="59" y="68" width="14" height="9" rx="1" fill="#444" stroke="#000" stroke-width="1.5"/>
+        <!-- Battery -->
+        <rect x="48" y="120" width="44" height="8" rx="1" fill="#2a2a2a" stroke="#000" stroke-width="2"/>
+        <!-- Chuck -->
+        <rect x="132" y="34" width="22" height="34" fill="url(#metalChuck)" stroke="#000" stroke-width="2"/>
+        <rect x="132" y="42" width="22" height="2" fill="#000"/>
+        <rect x="132" y="58" width="22" height="2" fill="#000"/>
+        <!-- Drill bit -->
+        <rect x="154" y="46" width="36" height="10" fill="#aaa" stroke="#000" stroke-width="1.5"/>
+        <path d="M154 51 L160 47 L166 55 L172 47 L178 55 L184 47 L190 55" stroke="#555" stroke-width="1.2" fill="none"/>
+        <!-- Tip -->
+        <polygon points="190,46 190,56 198,51" fill="#ccc" stroke="#000" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="lab-controls" id="labControls" hidden>
+    <label>Size
+      <input type="range" id="sizeSlider" min="10" max="80" value="30">
+    </label>
+    <label>Rotate
+      <input type="range" id="rotateSlider" min="-180" max="180" value="0">
+    </label>
+    <button class="lab-btn" id="flipBtn">↔ FLIP</button>
+    <button class="lab-btn" id="resetBtn">✕ RESET</button>
+    <button class="lab-btn primary" id="downloadBtn">↓ DOWNLOAD</button>
+  </div>
+</section>
+
 <!-- GALLERY / MOSAIC -->
 <section id="gallery">
   <div class="gallery-header">
@@ -598,6 +788,169 @@
 
   // Resume if tab was in background
   document.addEventListener('visibilitychange', handleVisibility);
+
+  // ─── DRILL LAB ───
+  const labCanvas = document.getElementById('labCanvas');
+  const labEmpty = document.getElementById('labEmpty');
+  const labControls = document.getElementById('labControls');
+  const userImageEl = document.getElementById('userImage');
+  const drillOverlay = document.getElementById('drillOverlay');
+  const fileInput = document.getElementById('fileInput');
+  const sizeSlider = document.getElementById('sizeSlider');
+  const rotateSlider = document.getElementById('rotateSlider');
+  const flipBtn = document.getElementById('flipBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let drillX = 50, drillY = 50, drillSize = 30, drillRotation = 0, drillFlipped = false;
+  let isDragging = false;
+  let dragStart = {};
+
+  function updateDrillStyle() {
+    drillOverlay.style.left = drillX + '%';
+    drillOverlay.style.top = drillY + '%';
+    drillOverlay.style.width = drillSize + '%';
+    const flipScale = drillFlipped ? -1 : 1;
+    drillOverlay.style.transform = `translate(-50%, -50%) rotate(${drillRotation}deg) scaleX(${flipScale})`;
+  }
+
+  function loadImage(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        labCanvas.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+        userImageEl.src = e.target.result;
+        userImageEl.hidden = false;
+        labEmpty.hidden = true;
+        drillOverlay.hidden = false;
+        labControls.hidden = false;
+        labCanvas.classList.add('has-image');
+        updateDrillStyle();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Open file picker (only when no image yet)
+  labCanvas.addEventListener('click', (e) => {
+    if (!labCanvas.classList.contains('has-image')) fileInput.click();
+  });
+  fileInput.addEventListener('change', (e) => loadImage(e.target.files[0]));
+
+  // Drag and drop
+  ['dragenter', 'dragover'].forEach(ev => labCanvas.addEventListener(ev, (e) => {
+    e.preventDefault();
+    labCanvas.classList.add('dragover');
+  }));
+  ['dragleave', 'drop'].forEach(ev => labCanvas.addEventListener(ev, (e) => {
+    e.preventDefault();
+    labCanvas.classList.remove('dragover');
+  }));
+  labCanvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length) loadImage(e.dataTransfer.files[0]);
+  });
+
+  // Drag the drill
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    const rect = labCanvas.getBoundingClientRect();
+    dragStart = {
+      mx: clientX, my: clientY,
+      dx: drillX, dy: drillY,
+      w: rect.width, h: rect.height
+    };
+  }
+  function moveDrag(clientX, clientY) {
+    if (!isDragging) return;
+    const ddx = (clientX - dragStart.mx) / dragStart.w * 100;
+    const ddy = (clientY - dragStart.my) / dragStart.h * 100;
+    drillX = Math.max(0, Math.min(100, dragStart.dx + ddx));
+    drillY = Math.max(0, Math.min(100, dragStart.dy + ddy));
+    updateDrillStyle();
+  }
+  function endDrag() { isDragging = false; }
+
+  drillOverlay.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', endDrag);
+
+  drillOverlay.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, { passive: false });
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const t = e.touches[0];
+    moveDrag(t.clientX, t.clientY);
+  }, { passive: false });
+  document.addEventListener('touchend', endDrag);
+
+  // Sliders & buttons
+  sizeSlider.addEventListener('input', () => { drillSize = +sizeSlider.value; updateDrillStyle(); });
+  rotateSlider.addEventListener('input', () => { drillRotation = +rotateSlider.value; updateDrillStyle(); });
+  flipBtn.addEventListener('click', () => { drillFlipped = !drillFlipped; updateDrillStyle(); });
+
+  resetBtn.addEventListener('click', () => {
+    userImageEl.src = ''; userImageEl.hidden = true;
+    labEmpty.hidden = false;
+    drillOverlay.hidden = true;
+    labControls.hidden = true;
+    labCanvas.classList.remove('has-image');
+    labCanvas.style.aspectRatio = '1';
+    fileInput.value = '';
+    drillX = 50; drillY = 50; drillSize = 30; drillRotation = 0; drillFlipped = false;
+    sizeSlider.value = 30; rotateSlider.value = 0;
+  });
+
+  // Download composite
+  downloadBtn.addEventListener('click', () => {
+    const baseImg = new Image();
+    baseImg.onload = () => {
+      const cnv = document.createElement('canvas');
+      cnv.width = baseImg.naturalWidth;
+      cnv.height = baseImg.naturalHeight;
+      const ctx = cnv.getContext('2d');
+      ctx.drawImage(baseImg, 0, 0);
+
+      // Rasterize SVG drill
+      const svgEl = drillOverlay.querySelector('svg');
+      const svgString = new XMLSerializer().serializeToString(svgEl);
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const svgUrl = URL.createObjectURL(svgBlob);
+
+      const drillImg = new Image();
+      drillImg.onload = () => {
+        const drillW = cnv.width * (drillSize / 100);
+        const drillH = drillW * (drillImg.naturalHeight / drillImg.naturalWidth);
+        const cx = cnv.width * (drillX / 100);
+        const cy = cnv.height * (drillY / 100);
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(drillRotation * Math.PI / 180);
+        if (drillFlipped) ctx.scale(-1, 1);
+        ctx.drawImage(drillImg, -drillW/2, -drillH/2, drillW, drillH);
+        ctx.restore();
+
+        URL.revokeObjectURL(svgUrl);
+        const link = document.createElement('a');
+        link.download = 'drilly-meme.png';
+        link.href = cnv.toDataURL('image/png');
+        link.click();
+      };
+      drillImg.src = svgUrl;
+    };
+    baseImg.src = userImageEl.src;
+  });
 
   // ─── SCROLL REVEAL ───
   const observer = new IntersectionObserver((entries) => {
