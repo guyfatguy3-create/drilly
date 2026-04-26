@@ -100,37 +100,75 @@
       transform: translateY(22vh);
     }
 
-    .hero-eyebrow {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 6px;
-      color: var(--gold);
-      text-transform: uppercase;
+    .social-icons {
+      display: flex;
+      gap: 14px;
       opacity: 0;
-      animation: fadeUp 0.8s ease 0.2s forwards;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .social-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .social-icon:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(245,200,66,0.3);
+    }
+
+    .social-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .meme-gen-btn {
+      display: inline-block;
+      padding: 14px 30px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 4px;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s ease;
+      margin-top: 6px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+
+    .meme-gen-btn:hover {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(245,200,66,0.3);
     }
 
     .hero-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(7rem, 18vw, 16rem);
+      font-size: clamp(4rem, 10vw, 8.5rem);
       line-height: 0.9;
       color: #fff;
       text-shadow:
-        0 0 80px rgba(245, 200, 66, 0.4),
-        0 0 160px rgba(245, 200, 66, 0.15);
+        0 0 60px rgba(0, 0, 0, 0.85),
+        0 0 120px rgba(245, 200, 66, 0.2);
       opacity: 0;
-      animation: fadeUp 0.8s ease 0.4s forwards;
-    }
-
-    .hero-subtitle {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 300;
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      letter-spacing: 4px;
-      color: var(--text);
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.6s forwards;
+      animation: fadeUp 0.8s ease 0.3s forwards;
     }
 
     .scroll-indicator {
@@ -344,82 +382,6 @@
       opacity: 0.5;
     }
 
-    /* ─── MOSAIC GRID ─── */
-    #gallery {
-      padding: 80px 20px;
-      background: #0a0a0a;
-    }
-
-    .gallery-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .mosaic {
-      columns: 5;
-      column-gap: 4px;
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    @media (max-width: 1200px) { .mosaic { columns: 4; } }
-    @media (max-width: 900px)  { .mosaic { columns: 3; } }
-    @media (max-width: 600px)  { .mosaic { columns: 2; } }
-
-    .mosaic-item {
-      break-inside: avoid;
-      margin-bottom: 4px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      background: #1a1a1a;
-    }
-
-    .mosaic-item img {
-      width: 100%;
-      display: block;
-      transition: transform 0.4s ease, filter 0.4s ease;
-      filter: brightness(0.8) saturate(0.9);
-    }
-
-    .mosaic-item:hover img {
-      transform: scale(1.06);
-      filter: brightness(1) saturate(1.2);
-    }
-
-    .mosaic-caption {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 20px 10px 10px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.85));
-      font-family: 'Space Mono', monospace;
-      font-size: 0.55rem;
-      letter-spacing: 2px;
-      color: var(--gold);
-      text-transform: uppercase;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .mosaic-item:hover .mosaic-caption { opacity: 1; }
-
-    /* placeholder tiles */
-    .tile-placeholder {
-      width: 100%;
-      aspect-ratio: 1;
-      background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 2px;
-      color: #333;
-      text-align: center;
-      padding: 10px;
-    }
-    .tile-placeholder.tall { aspect-ratio: 2/3; }
-    .tile-placeholder.wide { aspect-ratio: 3/2; }
-
     /* ─── CONTRACT ─── */
     #contract {
       padding: 120px 40px;
@@ -520,9 +482,16 @@
   </video>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">The Official Memecoin</p>
     <h1 class="hero-title">$DRILLY</h1>
-    <p class="hero-subtitle">Born in the trenches. Endorsed by the culture.</p>
+    <div class="social-icons">
+      <a href="https://x.com/DrillyCoinX" target="_blank" rel="noopener" class="social-icon" aria-label="Twitter / X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://t.me/+nfL7tEmcrocwZTY5" target="_blank" rel="noopener" class="social-icon" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+    </div>
+    <a href="#meme-lab" class="meme-gen-btn">MEME GENERATOR →</a>
   </div>
   <div class="scroll-indicator">
     <span>SCROLL</span>
@@ -606,122 +575,6 @@
     <button class="lab-btn" id="flipBtn">↔ FLIP</button>
     <button class="lab-btn" id="resetBtn">✕ RESET</button>
     <button class="lab-btn primary" id="downloadBtn">↓ DOWNLOAD</button>
-  </div>
-</section>
-
-<!-- GALLERY / MOSAIC -->
-<section id="gallery">
-  <div class="gallery-header">
-    <span class="section-label">// The Culture</span>
-    <h2 class="section-title" style="color:#fff;">The Drilly Universe</h2>
-    <div class="divider"></div>
-  </div>
-
-  <div class="mosaic" id="mosaic-grid">
-
-    <!-- Row of placeholder tiles — replace src with your images when ready -->
-    <!-- To add your images: replace the class="tile-placeholder" divs below with <img src="yourimage.jpg"> -->
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILLY LORE</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">IN THE TRENCHES</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILL GANG</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">ENDORSED</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">PUMPFUN APPROVED</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILLY VIBES</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">NO LIMITS</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">THE LEGEND</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILLY CULTURE</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILL OR DIE</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILLY WORLD</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">ON TOP</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">CERTIFIED TRENCHES</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">THE MOVEMENT</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">DRILLY ERA</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder wide">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">BORN HERE</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">$DRILLY</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder tall">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">REAL ONES</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">WE DRILL</div>
-    </div>
-
-    <div class="mosaic-item">
-      <div class="tile-placeholder">DROP YOUR<br>IMAGE HERE</div>
-      <div class="mosaic-caption">LEGENDARY</div>
-    </div>
-
   </div>
 </section>
 
